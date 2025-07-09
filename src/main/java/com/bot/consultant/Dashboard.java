@@ -24,6 +24,43 @@ public class Dashboard extends TelegramLongPollingBot {
         return "BangTegBot"; // USERNAME BOT ANDA
     }
 
+    private String getAllKeywords() {
+        StringBuilder keywords = new StringBuilder();
+        MySQLConnector conn = new MySQLConnector();
+
+        try {
+            conn.connect();
+            String sql = "SELECT kata FROM kamut ORDER BY kata ASC";
+            PreparedStatement pstmt = conn.getMysqlConnection().prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String kata = rs.getString("kata");
+                if (kata != null) {
+                    kata = kata.trim();
+
+                    if (!kata.isEmpty() && !kata.equals("/")) {
+                        // Hilangkan semua '/' di awal, lalu tambahkan satu '/' saja
+                        while (kata.startsWith("/")) {
+                            kata = kata.substring(1);
+                        }
+                        keywords.append("/").append(kata).append("\n");
+                    }
+                }
+            }
+
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.closeConnection();
+        }
+
+        return keywords.toString();
+    }
+
+
+
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -62,13 +99,14 @@ public class Dashboard extends TelegramLongPollingBot {
                 if (!isMemberVerified) {
                     replyText = "Maaf, akun Anda belum diverifikasi. Mohon tunggu verifikasi dari admin untuk dapat menggunakan bot ini. Jika Anda belum mendaftar, ketik /start.";
                 } else {
-                    replyText = "Silahkan pilih menu konsultasi Anda !! "+ "Berikut Daftar Perintah yang Tersedia:\n"
-                            +"____________________________________________.\n"
-                              + "/Alamat_Kampus - Menampilkan informasi alamat kampus.\n"
-                              + "/Info_Pendaftaran - Menampilkan informasi pendaftaran umum.\n"
-                            +"____________________________________________.\n"
-                              
-                              + "Anda juga bisa bertanya dengan kata kunci yang sudah terdaftar.";
+                    replyText = "Selamat Dang di BangTegBot(Bang Warteg)😁, Berikut Daftar Perintah yang Tersedia:\n"
+                    // + "____________________________________________\n"
+                    // + "/Alamat_Kampus - Menampilkan informasi alamat kampus\n"
+                    // + "/Info_Pendaftaran - Menampilkan informasi pendaftaran umum\n"
+                    // + "____________________________________________\n\n"
+                    + "Kata kunci yang tersedia:\n"
+                    + getAllKeywords();  // ← ini akan mengambil semua kata dari tabel kamut
+
                 }
             } else {
                 if (!isMemberVerified) {
@@ -77,7 +115,7 @@ public class Dashboard extends TelegramLongPollingBot {
                     // Logika balasan otomatis dari kamut
                     replyText = getReplyFromKeyword(receivedMessage);
                     if (replyText == null) {
-                        replyText = "Maaf, saya tidak mengerti pertanyaan Anda. Silakan coba kata kunci lain atau hubungi admin.";
+                        replyText = "Maaf, saya tidak mengerti pertanyaan Anda. Silakan coba kata kunci lain atau hubungi admin. klik /help untuk mencari daftar perintah";
                     }
                 }
             }
