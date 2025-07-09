@@ -168,7 +168,7 @@ public class MemberManagementForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Status verifikasi member berhasil diupdate.");
                 loadMembers();
                 clearFields();
-                String message = verify ? "Akun Anda telah diverifikasi. Anda sekarang dapat menggunakan bot ini sepenuhnya." : "Verifikasi akun Anda telah dibatalkan.";
+                String message = verify ? "Akun Anda telah diverifikasi. Anda sekarang dapat menggunakan bot ini sepenuhnya. ketik /help untuk mencarinya" : "Verifikasi akun Anda telah dibatalkan.";
                 TelegramSender.sendMessage(chatId, message);
             } else {
                 JOptionPane.showMessageDialog(this, "Gagal mengupdate status verifikasi.");

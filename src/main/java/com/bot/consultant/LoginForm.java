@@ -33,14 +33,12 @@ public class LoginForm extends JFrame {
         // Mengatur warna latar belakang JFrame menjadi merah
         getContentPane().setBackground(Color.white); // Background Putih
         
-
         titleLabel = new JLabel("SILAHKAN LOGIN");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
         titleLabel.setBounds(120, 20, 200, 25);
         titleLabel.setForeground(new Color(42, 127, 255)); // Mengatur warna teks menjadi putih
         add(titleLabel);
 
-        
         userLabel = new JLabel("Username:");
         userLabel.setBounds(50, 60, 100, 25);
         userLabel.setForeground(new Color(62, 109, 53));; // Mengatur warna teks menjadi putih
@@ -134,9 +132,6 @@ public class LoginForm extends JFrame {
             db.closeConnection();
         }
     }
-
-    
-    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new LoginForm().setVisible(true));
     }

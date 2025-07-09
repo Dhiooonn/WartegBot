@@ -161,7 +161,7 @@ public class Dashboard extends TelegramLongPollingBot {
         MySQLConnector db = new MySQLConnector();
         try {
             db.connect();
-            String sql = "INSERT INTO chat_history (chat_id, message_type, message_text) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO members (chat_id, username, is_verified, registration_date) VALUES (?, ?, true, NOW())"; // untuk verifikasi otomatis
             PreparedStatement stmt = db.getMysqlConnection().prepareStatement(sql);
             stmt.setString(1, chatId);
             stmt.setString(2, type);
